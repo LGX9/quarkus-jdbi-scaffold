@@ -1,6 +1,6 @@
 package de.pfwd.web;
 
-import de.pfwd.service.NotificationService;
+import de.pfwd.service.notification.NotificationService;
 import de.pfwd.web.dto.ResponseDTO.NotificationResponseDTO;
 import java.util.List;
 import javax.inject.Inject;

@@ -1,21 +1,36 @@
 package de.pfwd.db.repositories;
 
-import de.pfwd.service.SystemEvent;
+import de.pfwd.db.entities.SystemEventEntity;
+import de.pfwd.db.entities.mappers.SystemEventEntityMapper;
+import de.pfwd.service.systemevent.SystemEventType;
 import java.time.OffsetDateTime;
-import java.util.Map;
-import org.jdbi.v3.postgres.HStore;
+import java.util.List;
+import org.jdbi.v3.sqlobject.config.RegisterRowMapper;
 import org.jdbi.v3.sqlobject.customizer.Bind;
+import org.jdbi.v3.sqlobject.statement.SqlQuery;
 import org.jdbi.v3.sqlobject.statement.SqlUpdate;
 
 public interface SystemEventRepository {
 
+  @SqlQuery("""
+      SELECT
+        setypes.name AS event_type, se.payload, se.creation_date, se.received_date
+      FROM
+        system_events se
+      JOIN
+        system_event_types setypes ON setypes.id = se.system_event_type_id
+      ORDER BY se.id
+  """)
+  @RegisterRowMapper(SystemEventEntityMapper.class)
+  List<SystemEventEntity> retrieveSystemEvents();
+
   @SqlUpdate("""
       INSERT INTO system_events
-        (event_type, creation_date, received_date)
+        (system_event_type_id, payload, creation_date, received_date)
       VALUES
-        (:eventType, :creationDate, :receivedDate)
+        ((SELECT id FROM system_event_types WHERE name = :eventType), CAST(:payload as jsonb), :creationDate, :receivedDate)
   """)
-  void createSystemEvent(@Bind("eventType") SystemEvent eventType, Map<String, String> payload,
+  Integer createSystemEvent(@Bind("eventType") SystemEventType eventType, @Bind("payload") String payload,
       @Bind("creationDate")OffsetDateTime creationDate, @Bind("receivedDate")OffsetDateTime receivedDate);
 
 
