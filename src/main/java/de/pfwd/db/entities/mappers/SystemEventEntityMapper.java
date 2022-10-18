@@ -3,6 +3,7 @@ package de.pfwd.db.entities.mappers;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.pfwd.db.entities.SystemEventEntity;
 import de.pfwd.service.systemevent.SystemEventType;
+import io.quarkus.logging.Log;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.OffsetDateTime;
@@ -26,7 +27,7 @@ public class SystemEventEntityMapper implements RowMapper<SystemEventEntity> {
     try {
       payloadMap = objectMapper.readValue(payload.getValue(), Map.class);
     } catch (Exception e) {
-      e.printStackTrace();
+      Log.error(e.getMessage(), e);
       payloadMap = new HashMap<>();
     }
 

@@ -7,13 +7,21 @@ import de.pfwd.service.notification.NotificationService;
 import de.pfwd.service.notification.NotificationSeverity;
 import de.pfwd.web.dto.RequestDTO.SystemEventRequestDTO;
 import de.pfwd.web.dto.ResponseDTO.SystemEventResponseDTO;
+import io.quarkus.logging.Log;
 import java.time.OffsetDateTime;
 import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+//import org.apache.logging.log4j.LogManager;
+//import org.apache.logging.log4j.Logger;
 
 @Singleton
 public class SystemEventService {
+
+//  private static Logger log = LogManager.getLogger(SystemEventService.class);
+  private static Logger log = LoggerFactory.getLogger(SystemEventService.class);
 
   @Inject
   SystemEventRepository systemEventRepository;
@@ -23,6 +31,8 @@ public class SystemEventService {
 
   @Inject
   SystemEventMapper systemEventMapper;
+
+
 
   private ObjectMapper objectMapper = new ObjectMapper();
 
@@ -35,10 +45,11 @@ public class SystemEventService {
     try {
       payloadString = objectMapper.writeValueAsString(event.payload());
     } catch (Exception e)  {
-      e.printStackTrace();
+      Log.error(e.getMessage(), e);
     }
     Integer systemEventId = systemEventRepository.createSystemEvent(event.eventType(), payloadString, event.creationDate(),
         OffsetDateTime.now());
+    log.info("Stored event: {}", event.eventType());
 
     NotificationSeverity severity = notificationService.getNotificationSeverity(event.eventType());
     if (severity == NotificationSeverity.ALARM || severity == NotificationSeverity.WARNING) {

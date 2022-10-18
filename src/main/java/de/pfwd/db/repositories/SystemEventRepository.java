@@ -28,7 +28,12 @@ public interface SystemEventRepository {
       INSERT INTO system_events
         (system_event_type_id, payload, creation_date, received_date)
       VALUES
-        ((SELECT id FROM system_event_types WHERE name = :eventType), CAST(:payload as jsonb), :creationDate, :receivedDate)
+        (
+          (SELECT id FROM system_event_types WHERE name = :eventType), 
+          CAST(:payload as jsonb), 
+          :creationDate, 
+          :receivedDate
+        )
   """)
   Integer createSystemEvent(@Bind("eventType") SystemEventType eventType, @Bind("payload") String payload,
       @Bind("creationDate")OffsetDateTime creationDate, @Bind("receivedDate")OffsetDateTime receivedDate);
