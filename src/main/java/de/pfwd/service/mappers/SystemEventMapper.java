@@ -7,6 +7,7 @@ import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "cdi")
 public interface SystemEventMapper {
-  SystemEventResponseDTO entityToDto(SystemEventEntity entity);
-  SystemEventEntity dtoToEntity(SystemEventRequestDTO dto);
+    SystemEventResponseDTO entityToDto(SystemEventEntity entity);
+
+    SystemEventEntity dtoToEntity(SystemEventRequestDTO dto);
 }

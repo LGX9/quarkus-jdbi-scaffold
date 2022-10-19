@@ -9,17 +9,15 @@ import org.jdbi.v3.core.Jdbi;
 @Singleton
 public class JdbiConfiguration {
 
-  @Inject
-  Jdbi jdbi;
+    @Inject Jdbi jdbi;
 
-  @Singleton
-  public NotificationRepository notificationRepository() {
-    return jdbi.onDemand(NotificationRepository.class);
-  }
+    @Singleton
+    public NotificationRepository notificationRepository() {
+        return jdbi.onDemand(NotificationRepository.class);
+    }
 
-  @Singleton
-  public SystemEventRepository systemEventRepository() {
-    return jdbi.onDemand(SystemEventRepository.class);
-  }
-
+    @Singleton
+    public SystemEventRepository systemEventRepository() {
+        return jdbi.onDemand(SystemEventRepository.class);
+    }
 }

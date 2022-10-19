@@ -10,14 +10,15 @@ import org.jdbi.v3.core.statement.StatementContext;
 
 public class NotificationEntityMapper implements RowMapper<NotificationEntity> {
 
-  @Override
-  public NotificationEntity map(ResultSet rs, StatementContext ctx) throws SQLException {
-    String subject = rs.getString("subject");
-    String message = rs.getString("message");
-    OffsetDateTime creationDate = OffsetDateTime.ofInstant(rs.getTimestamp("creation_date").toInstant(),
-        ZoneId.of("UTC"));
-    String severity = rs.getString("severity");
+    @Override
+    public NotificationEntity map(ResultSet rs, StatementContext ctx) throws SQLException {
+        String subject = rs.getString("subject");
+        String message = rs.getString("message");
+        OffsetDateTime creationDate =
+                OffsetDateTime.ofInstant(
+                        rs.getTimestamp("creation_date").toInstant(), ZoneId.of("UTC"));
+        String severity = rs.getString("severity");
 
-    return new NotificationEntity(subject, message, creationDate, severity);
-  }
+        return new NotificationEntity(subject, message, creationDate, severity);
+    }
 }

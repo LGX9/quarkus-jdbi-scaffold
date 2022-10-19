@@ -4,63 +4,68 @@ import java.time.OffsetDateTime;
 
 public class NotificationEntity {
 
-  String subject;
+    String subject;
 
-  String message;
+    String message;
 
-  OffsetDateTime creationDate;
+    OffsetDateTime creationDate;
 
-  String severity;
+    String severity;
 
-  public NotificationEntity(String subject, String message, OffsetDateTime creationDate,
-      String severity) {
-    this.subject = subject;
-    this.message = message;
-    this.creationDate = creationDate;
-    this.severity = severity;
-  }
+    public NotificationEntity(
+            String subject, String message, OffsetDateTime creationDate, String severity) {
+        this.subject = subject;
+        this.message = message;
+        this.creationDate = creationDate;
+        this.severity = severity;
+    }
 
-  public String getSubject() {
-    return subject;
-  }
+    public String getSubject() {
+        return subject;
+    }
 
-  public String getMessage() {
-    return message;
-  }
+    public String getMessage() {
+        return message;
+    }
 
-  public OffsetDateTime getCreationDate() {
-    return creationDate;
-  }
+    public OffsetDateTime getCreationDate() {
+        return creationDate;
+    }
 
-  public String getSeverity() {
-    return severity;
-  }
+    public String getSeverity() {
+        return severity;
+    }
 
-  public void setSubject(String subject) {
-    this.subject = subject;
-  }
+    public void setSubject(String subject) {
+        this.subject = subject;
+    }
 
-  public void setMessage(String message) {
-    this.message = message;
-  }
+    public void setMessage(String message) {
+        this.message = message;
+    }
 
-  public void setCreationDate(OffsetDateTime creationDate) {
-    this.creationDate = creationDate;
-  }
+    public void setCreationDate(OffsetDateTime creationDate) {
+        this.creationDate = creationDate;
+    }
 
-  public void setSeverity(String severity) {
-    this.severity = severity;
-  }
+    public void setSeverity(String severity) {
+        this.severity = severity;
+    }
 
-  @Override
-  public String toString() {
-    return "NotificationEntity{" +
-        "subject='" + subject + '\'' +
-        ", message='" + message + '\'' +
-        ", creationDate=" + creationDate +
-        ", severity='" + severity + '\'' +
-        '}';
-  }
-
-
+    @Override
+    public String toString() {
+        return "NotificationEntity{"
+                + "subject='"
+                + subject
+                + '\''
+                + ", message='"
+                + message
+                + '\''
+                + ", creationDate="
+                + creationDate
+                + ", severity='"
+                + severity
+                + '\''
+                + '}';
+    }
 }

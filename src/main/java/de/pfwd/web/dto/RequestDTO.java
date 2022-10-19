@@ -6,8 +6,6 @@ import java.util.Map;
 
 public class RequestDTO {
 
-  public record SystemEventRequestDTO(SystemEventType eventType, Map<String, String> payload,
-                                      OffsetDateTime creationDate) {}
-
-
+    public record SystemEventRequestDTO(
+            SystemEventType eventType, Map<String, String> payload, OffsetDateTime creationDate) {}
 }

@@ -12,12 +12,11 @@ import javax.ws.rs.core.MediaType;
 @Path("/notifications")
 public class NotificationResource {
 
-  @Inject
-  NotificationService notificationService;
+    @Inject NotificationService notificationService;
 
-  @GET
-  @Produces(MediaType.APPLICATION_JSON)
-  public List<NotificationResponseDTO> getNotifications() {
-    return notificationService.retrieveNotifications();
-  }
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<NotificationResponseDTO> getNotifications() {
+        return notificationService.retrieveNotifications();
+    }
 }

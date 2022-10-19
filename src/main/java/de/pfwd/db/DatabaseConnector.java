@@ -11,18 +11,16 @@ import org.jdbi.v3.sqlobject.SqlObjectPlugin;
 @Singleton
 public class DatabaseConnector {
 
-  @Inject
-  AgroalDataSource defaultDataSource;
+    @Inject AgroalDataSource defaultDataSource;
 
-  public Connection createConnection() throws Exception {
-      return defaultDataSource.getConnection();
-  }
+    public Connection createConnection() throws Exception {
+        return defaultDataSource.getConnection();
+    }
 
-  @Singleton
-  public Jdbi getJdbi() {
-    return Jdbi.create(defaultDataSource)
-        .installPlugin(new SqlObjectPlugin())
-        .installPlugin(new PostgresPlugin());
-
-  }
+    @Singleton
+    public Jdbi getJdbi() {
+        return Jdbi.create(defaultDataSource)
+                .installPlugin(new SqlObjectPlugin())
+                .installPlugin(new PostgresPlugin());
+    }
 }

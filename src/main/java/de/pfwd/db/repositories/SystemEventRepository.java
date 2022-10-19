@@ -12,7 +12,8 @@ import org.jdbi.v3.sqlobject.statement.SqlUpdate;
 
 public interface SystemEventRepository {
 
-  @SqlQuery("""
+    @SqlQuery(
+    """
       SELECT
         setypes.name AS event_type, se.payload, se.creation_date, se.received_date
       FROM
@@ -20,23 +21,25 @@ public interface SystemEventRepository {
       JOIN
         system_event_types setypes ON setypes.id = se.system_event_type_id
       ORDER BY se.id
-  """)
-  @RegisterRowMapper(SystemEventEntityMapper.class)
-  List<SystemEventEntity> retrieveSystemEvents();
+    """)
+    @RegisterRowMapper(SystemEventEntityMapper.class)
+    List<SystemEventEntity> retrieveSystemEvents();
 
-  @SqlUpdate("""
+    @SqlUpdate(
+    """
       INSERT INTO system_events
         (system_event_type_id, payload, creation_date, received_date)
       VALUES
         (
-          (SELECT id FROM system_event_types WHERE name = :eventType), 
-          CAST(:payload as jsonb), 
-          :creationDate, 
+          (SELECT id FROM system_event_types WHERE name = :eventType),
+          CAST(:payload as jsonb),
+          :creationDate,
           :receivedDate
         )
-  """)
-  Integer createSystemEvent(@Bind("eventType") SystemEventType eventType, @Bind("payload") String payload,
-      @Bind("creationDate")OffsetDateTime creationDate, @Bind("receivedDate")OffsetDateTime receivedDate);
-
-
+    """)
+    Integer createSystemEvent(
+            @Bind("eventType") SystemEventType eventType,
+            @Bind("payload") String payload,
+            @Bind("creationDate") OffsetDateTime creationDate,
+            @Bind("receivedDate") OffsetDateTime receivedDate);
 }

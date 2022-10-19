@@ -22,51 +22,58 @@ import javax.inject.Singleton;
 @Singleton
 public class JacksonConfig implements ObjectMapperCustomizer {
 
-  DateTimeFormatter formatter = new DateTimeFormatterBuilder()
-      // date/time
-      .appendPattern("yyyy-MM-dd HH:mm:ss")
-      // optional fraction of seconds (from 0 to 9 digits)
-      .optionalStart().appendFraction(ChronoField.NANO_OF_SECOND, 0, 9, true).optionalEnd()
-      // offset
-      .appendPattern("x")
-      // create formatter
-      .toFormatter();
-
-  @Override
-  public void customize(ObjectMapper objectMapper) {
-    objectMapper.registerModule(new ParameterNamesModule());
-    JavaTimeModule timeModule = new JavaTimeModule();
-    timeModule.addSerializer(OffsetDateTime.class, new CustomOffsetDateTimeSerializer(formatter));
-    timeModule.addDeserializer(OffsetDateTime.class, new CustomOffsetDateTimeDeserializer(formatter));
-    objectMapper.registerModule(timeModule);
-    objectMapper.registerModule(new Jdk8Module());
-  }
-
-  public class CustomOffsetDateTimeDeserializer extends JsonDeserializer<OffsetDateTime> {
-
-    private DateTimeFormatter formatter;
-
-    public CustomOffsetDateTimeDeserializer(DateTimeFormatter formatter) {
-      this.formatter = formatter;
-    }
+    DateTimeFormatter formatter =
+            new DateTimeFormatterBuilder()
+                    // date/time
+                    .appendPattern("yyyy-MM-dd HH:mm:ss")
+                    // optional fraction of seconds (from 0 to 9 digits)
+                    .optionalStart()
+                    .appendFraction(ChronoField.NANO_OF_SECOND, 0, 9, true)
+                    .optionalEnd()
+                    // offset
+                    .appendPattern("x")
+                    // create formatter
+                    .toFormatter();
 
     @Override
-    public OffsetDateTime deserialize(JsonParser parser, DeserializationContext context) throws IOException, JsonProcessingException {
-      return OffsetDateTime.parse(parser.getText(), this.formatter);
-    }
-  }
-
-  public class CustomOffsetDateTimeSerializer extends JsonSerializer<OffsetDateTime> {
-
-    private DateTimeFormatter formatter;
-
-    public CustomOffsetDateTimeSerializer(DateTimeFormatter formatter) {
-      this.formatter = formatter;
+    public void customize(ObjectMapper objectMapper) {
+        objectMapper.registerModule(new ParameterNamesModule());
+        JavaTimeModule timeModule = new JavaTimeModule();
+        timeModule.addSerializer(
+                OffsetDateTime.class, new CustomOffsetDateTimeSerializer(formatter));
+        timeModule.addDeserializer(
+                OffsetDateTime.class, new CustomOffsetDateTimeDeserializer(formatter));
+        objectMapper.registerModule(timeModule);
+        objectMapper.registerModule(new Jdk8Module());
     }
 
-    @Override
-    public void serialize(OffsetDateTime value, JsonGenerator gen, SerializerProvider provider) throws IOException, JsonProcessingException {
-      gen.writeString(value.format(this.formatter));
+    public class CustomOffsetDateTimeDeserializer extends JsonDeserializer<OffsetDateTime> {
+
+        private DateTimeFormatter formatter;
+
+        public CustomOffsetDateTimeDeserializer(DateTimeFormatter formatter) {
+            this.formatter = formatter;
+        }
+
+        @Override
+        public OffsetDateTime deserialize(JsonParser parser, DeserializationContext context)
+                throws IOException, JsonProcessingException {
+            return OffsetDateTime.parse(parser.getText(), this.formatter);
+        }
     }
-  }
+
+    public class CustomOffsetDateTimeSerializer extends JsonSerializer<OffsetDateTime> {
+
+        private DateTimeFormatter formatter;
+
+        public CustomOffsetDateTimeSerializer(DateTimeFormatter formatter) {
+            this.formatter = formatter;
+        }
+
+        @Override
+        public void serialize(OffsetDateTime value, JsonGenerator gen, SerializerProvider provider)
+                throws IOException, JsonProcessingException {
+            gen.writeString(value.format(this.formatter));
+        }
+    }
 }

@@ -6,5 +6,5 @@ import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "cdi")
 public interface NotificationMapper {
-  NotificationResponseDTO entityToDto(NotificationEntity entity);
+    NotificationResponseDTO entityToDto(NotificationEntity entity);
 }
