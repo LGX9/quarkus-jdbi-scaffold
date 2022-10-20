@@ -1,9 +1,13 @@
 package de.pfwd.scaffold.quarkusjdbi.persist.entities;
 
 import java.time.OffsetDateTime;
+import java.util.UUID;
 
 public class NotificationEntity {
 
+    Long id;
+
+    UUID uuid;
     String subject;
 
     String message;
@@ -13,11 +17,34 @@ public class NotificationEntity {
     String severity;
 
     public NotificationEntity(
-            String subject, String message, OffsetDateTime creationDate, String severity) {
+            Long id,
+            UUID uuid,
+            String subject,
+            String message,
+            OffsetDateTime creationDate,
+            String severity) {
+        this.id = id;
+        this.uuid = uuid;
         this.subject = subject;
         this.message = message;
         this.creationDate = creationDate;
         this.severity = severity;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public UUID getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(UUID uuid) {
+        this.uuid = uuid;
     }
 
     public String getSubject() {

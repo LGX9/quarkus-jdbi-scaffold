@@ -5,8 +5,10 @@ import de.pfwd.scaffold.quarkusjdbi.persist.entities.mappers.SystemEventEntityMa
 import de.pfwd.scaffold.quarkusjdbi.service.systemevent.SystemEventType;
 import java.time.OffsetDateTime;
 import java.util.List;
+import java.util.UUID;
 import org.jdbi.v3.sqlobject.config.RegisterRowMapper;
 import org.jdbi.v3.sqlobject.customizer.Bind;
+import org.jdbi.v3.sqlobject.statement.GetGeneratedKeys;
 import org.jdbi.v3.sqlobject.statement.SqlQuery;
 import org.jdbi.v3.sqlobject.statement.SqlUpdate;
 
@@ -16,7 +18,7 @@ public interface SystemEventRepository {
     @SqlQuery(
     """
       SELECT
-        setypes.name AS event_type, se.payload, se.creation_date, se.received_date
+        se.id, se.uuid, setypes.name AS event_type, se.payload, se.creation_date, se.received_date
       FROM
         system_events se
       JOIN
@@ -31,9 +33,10 @@ public interface SystemEventRepository {
     @SqlUpdate(
     """
       INSERT INTO system_events
-        (system_event_type_id, payload, creation_date, received_date)
+        (uuid, system_event_type_id, payload, creation_date, received_date)
       VALUES
         (
+          :uuid,
           (SELECT id FROM system_event_types WHERE name = :eventType),
           CAST(:payload as jsonb),
           :creationDate,
@@ -41,9 +44,32 @@ public interface SystemEventRepository {
         )
     """)
     // spotless:on
-    Integer createSystemEvent(
+    @GetGeneratedKeys
+    Long createSystemEvent(
+            @Bind("uuid") UUID uuid,
             @Bind("eventType") SystemEventType eventType,
             @Bind("payload") String payload,
             @Bind("creationDate") OffsetDateTime creationDate,
             @Bind("receivedDate") OffsetDateTime receivedDate);
+
+    // spotless:off
+    @SqlUpdate(
+    """
+        WITH systemEventToDelete as (
+             SELECT id FROM 
+                system_events
+             WHERE
+                uuid = :uuid
+        ),
+        notificationDeletes AS (
+            DELETE FROM notifications
+                WHERE system_event_id 
+                    IN (SELECT * FROM systemEventToDelete)
+        )
+        DELETE FROM system_events 
+            WHERE id IN (SELECT * FROM systemEventToDelete)
+    """
+    )
+    // spotless:on
+    public void deleteByUUID(@Bind("uuid") UUID uuid);
 }

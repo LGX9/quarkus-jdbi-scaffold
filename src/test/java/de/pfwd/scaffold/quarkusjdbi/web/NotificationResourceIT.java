@@ -1,4 +1,4 @@
-package de.pfwd.scaffold.quarkusjdbi;
+package de.pfwd.scaffold.quarkusjdbi.web;
 
 import io.quarkus.test.junit.QuarkusIntegrationTest;
 

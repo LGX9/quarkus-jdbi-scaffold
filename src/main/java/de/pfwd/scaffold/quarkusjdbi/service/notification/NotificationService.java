@@ -7,6 +7,7 @@ import de.pfwd.scaffold.quarkusjdbi.web.dto.RequestDTO.SystemEventRequestDTO;
 import de.pfwd.scaffold.quarkusjdbi.web.dto.ResponseDTO.NotificationResponseDTO;
 import java.time.OffsetDateTime;
 import java.util.List;
+import java.util.UUID;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
@@ -26,13 +27,18 @@ public class NotificationService {
     public void createSystemEventNotification(
             SystemEventRequestDTO systemEvent,
             NotificationSeverity notificationSeverity,
-            Integer systemEventId) {
+            Long systemEventId) {
         notificationRepository.createNotification(
+                UUID.randomUUID(),
                 "Random Subject ... Important!",
                 "This happened: " + systemEvent.eventType(),
                 OffsetDateTime.now(),
                 notificationSeverity,
                 systemEventId);
+    }
+
+    public void deleteNotificationByUUID(UUID uuid) {
+        notificationRepository.deleteByUUID(uuid);
     }
 
     public NotificationSeverity getNotificationSeverity(SystemEventType systemEventType) {

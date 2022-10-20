@@ -21,6 +21,7 @@ ON CONFLICT
 
 CREATE TABLE IF NOT EXISTS system_events (
     id serial PRIMARY KEY,
+    uuid UUID NOT NULL,
     system_event_type_id int NOT NULL,
     payload jsonb not null default '{}'::jsonb,
     creation_date TIMESTAMPTZ NOT NULL,
@@ -46,6 +47,7 @@ ON CONFLICT
 
 CREATE TABLE IF NOT EXISTS notifications (
     id serial PRIMARY KEY,
+    uuid UUID NOT NULL,
     subject varchar(255) NOT NULL,
     message TEXT NOT NULL,
     creation_date TIMESTAMPTZ NOT NULL,

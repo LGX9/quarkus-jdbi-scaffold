@@ -1,4 +1,4 @@
-package de.pfwd.scaffold.quarkusjdbi;
+package de.pfwd.scaffold.quarkusjdbi.web;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.is;

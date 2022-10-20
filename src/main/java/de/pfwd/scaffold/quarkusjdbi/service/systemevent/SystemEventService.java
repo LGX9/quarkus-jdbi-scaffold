@@ -10,6 +10,7 @@ import de.pfwd.scaffold.quarkusjdbi.web.dto.ResponseDTO.SystemEventResponseDTO;
 import io.quarkus.logging.Log;
 import java.time.OffsetDateTime;
 import java.util.List;
+import java.util.UUID;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
@@ -37,8 +38,9 @@ public class SystemEventService {
         } catch (Exception e) {
             Log.error(e.getMessage(), e);
         }
-        Integer systemEventId =
+        Long systemEventId =
                 systemEventRepository.createSystemEvent(
+                        UUID.randomUUID(),
                         event.eventType(),
                         payloadString,
                         event.creationDate(),
@@ -50,5 +52,9 @@ public class SystemEventService {
         if (severity == NotificationSeverity.ALARM || severity == NotificationSeverity.WARNING) {
             notificationService.createSystemEventNotification(event, severity, systemEventId);
         }
+    }
+
+    public void deleteSystemEventByUUID(UUID uuid) {
+        systemEventRepository.deleteByUUID(uuid);
     }
 }

@@ -10,6 +10,7 @@ import java.time.OffsetDateTime;
 import java.time.ZoneId;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 import org.jdbi.v3.core.mapper.RowMapper;
 import org.jdbi.v3.core.statement.StatementContext;
 import org.postgresql.util.PGobject;
@@ -20,6 +21,9 @@ public class SystemEventEntityMapper implements RowMapper<SystemEventEntity> {
 
     @Override
     public SystemEventEntity map(ResultSet rs, StatementContext ctx) throws SQLException {
+
+        Long id = rs.getLong("id");
+        UUID uuid = UUID.fromString(rs.getString("uuid"));
         SystemEventType eventType = SystemEventType.valueOf(rs.getString("event_type"));
 
         PGobject payload = ((PGobject) rs.getObject("payload"));
@@ -39,6 +43,6 @@ public class SystemEventEntityMapper implements RowMapper<SystemEventEntity> {
                 OffsetDateTime.ofInstant(
                         rs.getTimestamp("received_date").toInstant(), ZoneId.of("UTC"));
 
-        return new SystemEventEntity(eventType, payloadMap, creationDate, receivedDate);
+        return new SystemEventEntity(id, uuid, eventType, payloadMap, creationDate, receivedDate);
     }
 }
