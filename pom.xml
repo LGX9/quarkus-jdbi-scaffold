@@ -2,7 +2,7 @@
 <project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>de.pfwd</groupId>
+  <groupId>de.pfwd.scaffold</groupId>
   <artifactId>quarkus-jdbi-scaffold</artifactId>
   <version>1.0.0-SNAPSHOT</version>
   <properties>
@@ -174,7 +174,7 @@
         <version>${spotless.version}</version>
         <configuration>
           <!-- optional: limit format enforcement to just the files changed by this feature branch -->
-          <ratchetFrom>origin/main</ratchetFrom>
+          <ratchetFrom>origin/master</ratchetFrom>
           <formats>
             <!-- you can define as many formats as you want, each is independent -->
             <format>
@@ -202,7 +202,9 @@
               <style>AOSP</style>
               <reflowLongStrings>true</reflowLongStrings>
             </googleJavaFormat>
+            <toggleOffOn />
           </java>
+
         </configuration>
       </plugin>
     </plugins>
