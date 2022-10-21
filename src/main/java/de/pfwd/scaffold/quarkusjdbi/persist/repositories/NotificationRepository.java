@@ -18,16 +18,40 @@ public interface NotificationRepository {
     @SqlQuery(
     """
           SELECT
-            n.id, n.uuid, n.subject, n.message, n.creation_date, s."name"  AS "severity"
+            n.id, n.uuid, n.subject, n.message, n.creation_date, nose."name"  AS "severity"
           FROM
             notifications n
-          JOIN notification_severities s
-            ON n.severity_id = s.id
-          ORDER BY n.severity_id
+          JOIN notification_severities nose
+            ON n.severity_id = nose.id
+          ORDER BY n.id
     """)
     // spotless:on
     @RegisterRowMapper(NotificationEntityMapper.class)
     List<NotificationEntity> retrieveNotifications();
+
+    // spotless:off
+    @SqlQuery(
+            """
+                  SELECT
+                    n.id, n.uuid, n.subject, n.message, n.creation_date, nose."name"  AS "severity"
+                  FROM
+                    notifications n
+                  JOIN 
+                    notification_severities nose
+                        ON n.severity_id = nose.id
+                  JOIN
+                    system_events se
+                        ON se.id = n.system_event_id
+                  JOIN
+                    systems s
+                        ON s.id = se.system_id
+                  WHERE
+                    s.uuid = :system_uuid
+                  ORDER BY n.id
+            """)
+    // spotless:on
+    @RegisterRowMapper(NotificationEntityMapper.class)
+    List<NotificationEntity> retrieveNotificationsFromSystem(@Bind("system_uuid") UUID systemUUID);
 
     // spotless:off
     @SqlUpdate(

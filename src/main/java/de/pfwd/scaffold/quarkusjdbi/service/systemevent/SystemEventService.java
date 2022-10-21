@@ -25,13 +25,19 @@ public class SystemEventService {
 
     private ObjectMapper objectMapper = new ObjectMapper();
 
+    public List<SystemEventResponseDTO> retrieveSystemEventsFromSystem(UUID systemUUID) {
+        return systemEventRepository.retrieveSystemEventsFromSystem(systemUUID).stream()
+                .map(it -> systemEventMapper.entityToDto(it))
+                .toList();
+    }
+
     public List<SystemEventResponseDTO> retrieveSystemEvents() {
         return systemEventRepository.retrieveSystemEvents().stream()
                 .map(it -> systemEventMapper.entityToDto(it))
                 .toList();
     }
 
-    public void createSystemEvent(SystemEventRequestDTO event) {
+    public void createSystemEvent(SystemEventRequestDTO event, UUID systemUUID) {
         String payloadString = null;
         try {
             payloadString = objectMapper.writeValueAsString(event.payload());
@@ -44,7 +50,8 @@ public class SystemEventService {
                         event.eventType(),
                         payloadString,
                         event.creationDate(),
-                        OffsetDateTime.now());
+                        OffsetDateTime.now(),
+                        systemUUID);
         Log.infov("Stored event: {0}", event.eventType().toString());
 
         NotificationSeverity severity =

@@ -25,6 +25,15 @@ public class NotificationResource {
         return notificationService.retrieveNotifications();
     }
 
+    @GET
+    @Path("/{systemUUID}")
+    @Produces(MediaType.APPLICATION_JSON)
+    @ResponseStatus(200)
+    public List<NotificationResponseDTO> getNotificationsFromSystem(
+            @PathParam("systemUUID") UUID systemUUID) {
+        return notificationService.retrieveNotificationsFromSystem(systemUUID);
+    }
+
     @DELETE
     @Produces(MediaType.APPLICATION_JSON)
     @ResponseStatus(204)

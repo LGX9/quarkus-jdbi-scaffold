@@ -26,23 +26,37 @@ public class SystemEventResource {
     @Produces(MediaType.APPLICATION_JSON)
     @ResponseStatus(200)
     public List<ResponseDTO.SystemEventResponseDTO> getSystemEvents() {
-        Log.info("Retrieving System Events");
+        Log.debugv("Retrieving Events for systems");
         return systemEventService.retrieveSystemEvents();
     }
 
+    @GET
+    @Path("/{systemUUID}")
+    @Produces(MediaType.APPLICATION_JSON)
+    @ResponseStatus(200)
+    public List<ResponseDTO.SystemEventResponseDTO> getSystemEventsFromSystem(
+            @PathParam("systemUUID") UUID systemUUID) {
+        Log.debugv("Retrieving Events for system: {}", systemUUID);
+        return systemEventService.retrieveSystemEventsFromSystem(systemUUID);
+    }
+
     @POST
+    @Path("/{systemUUID}")
     @Consumes(MediaType.APPLICATION_JSON)
     @ResponseStatus(201)
-    public void createSystemEvent(RequestDTO.SystemEventRequestDTO event) {
-        Log.info("Creating System Event " + event.eventType());
-        systemEventService.createSystemEvent(event);
+    public void createSystemEvent(
+            @PathParam("systemUUID") UUID systemUUID, RequestDTO.SystemEventRequestDTO event) {
+        Log.debugv("Creating System Event: {}", event.eventType());
+        systemEventService.createSystemEvent(event, systemUUID);
     }
 
     @DELETE
+    @Path("/{systemUUID}/{eventUUID}")
     @Produces(MediaType.APPLICATION_JSON)
     @ResponseStatus(204)
-    @Path("/{uuid}")
-    public void deleteByUUID(@PathParam("uuid") UUID uuid) {
-        systemEventService.deleteSystemEventByUUID(uuid);
+    public void deleteByUUID(
+            @PathParam("systemUUID") UUID systemUUID, @PathParam("eventUUID") UUID eventUUID) {
+        Log.debugv("Deleting Event {} of System {}", eventUUID, systemUUID);
+        systemEventService.deleteSystemEventByUUID(eventUUID);
     }
 }

@@ -24,6 +24,12 @@ public class NotificationService {
                 .toList();
     }
 
+    public List<NotificationResponseDTO> retrieveNotificationsFromSystem(UUID systemUUID) {
+        return notificationRepository.retrieveNotificationsFromSystem(systemUUID).stream()
+                .map(it -> notificationMapper.entityToDto(it))
+                .toList();
+    }
+
     public void createSystemEventNotification(
             SystemEventRequestDTO systemEvent,
             NotificationSeverity notificationSeverity,
@@ -43,13 +49,13 @@ public class NotificationService {
 
     public NotificationSeverity getNotificationSeverity(SystemEventType systemEventType) {
         switch (systemEventType) {
-            case SYSTEM_INITIALIZED, SYSTEM_DEACTIVATED, SYSTEM_PAUSED, HEARTBEAT -> {
+            case SYSTEM_PAUSED, HEARTBEAT -> {
                 return NotificationSeverity.INFO;
             }
-            case TEMPERATURE_TOO_HOT, TEMPERATURE_TOO_COLD, DISK_SPACE_ALMOST_FULL -> {
+            case TEMPERATURE_TOO_HOT, TEMPERATURE_TOO_COLD, DISK_ALMOST_FULL -> {
                 return NotificationSeverity.WARNING;
             }
-            case FAN_MALFUNCTION, NO_MORE_DISKSPACE, SYSTEM_CRASH -> {
+            case FAN_MALFUNCTION, DISK_FULL, SYSTEM_CRASH -> {
                 return NotificationSeverity.ALARM;
             }
             default -> throw new UnsupportedOperationException(

@@ -18,29 +18,53 @@ public interface SystemEventRepository {
     @SqlQuery(
     """
       SELECT
-        se.id, se.uuid, setypes.name AS event_type, se.payload, se.creation_date, se.received_date
+        se.id, se.uuid, setypes.name AS event_type, se.payload, se.creation_date, se.received_date, s.uuid as system_uuid
       FROM
         system_events se
       JOIN
         system_event_types setypes ON setypes.id = se.system_event_type_id
+      JOIN
+        systems s on s.id = se.system_id
       ORDER BY se.id
+      LIMIT 1000
     """)
     // spotless:on
     @RegisterRowMapper(SystemEventEntityMapper.class)
     List<SystemEventEntity> retrieveSystemEvents();
 
     // spotless:off
+    @SqlQuery(
+            """
+              SELECT
+                se.id, se.uuid, setypes.name AS event_type, se.payload, se.creation_date, se.received_date, s.uuid as system_uuid
+              FROM
+                system_events se
+              JOIN
+                system_event_types setypes ON setypes.id = se.system_event_type_id
+              JOIN
+                systems s on s.id = se.system_id
+              WHERE 
+                s.uuid = :systemUUID
+              ORDER BY se.id
+              LIMIT 1000
+            """)
+    // spotless:on
+    @RegisterRowMapper(SystemEventEntityMapper.class)
+    List<SystemEventEntity> retrieveSystemEventsFromSystem(@Bind("systemUUID") UUID systemUUID);
+
+    // spotless:off
     @SqlUpdate(
     """
       INSERT INTO system_events
-        (uuid, system_event_type_id, payload, creation_date, received_date)
+        (uuid, system_event_type_id, payload, creation_date, received_date, system_id)
       VALUES
         (
           :uuid,
           (SELECT id FROM system_event_types WHERE name = :eventType),
           CAST(:payload as jsonb),
           :creationDate,
-          :receivedDate
+          :receivedDate,
+          (SELECT id FROM systems WHERE uuid = :systemUUID)
         )
     """)
     // spotless:on
@@ -50,7 +74,8 @@ public interface SystemEventRepository {
             @Bind("eventType") SystemEventType eventType,
             @Bind("payload") String payload,
             @Bind("creationDate") OffsetDateTime creationDate,
-            @Bind("receivedDate") OffsetDateTime receivedDate);
+            @Bind("receivedDate") OffsetDateTime receivedDate,
+            @Bind("systemUUID") UUID systemUUID);
 
     // spotless:off
     @SqlUpdate(

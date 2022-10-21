@@ -8,4 +8,6 @@ public class RequestDTO {
 
     public record SystemEventRequestDTO(
             SystemEventType eventType, Map<String, String> payload, OffsetDateTime creationDate) {}
+
+    public record SystemCreateRequestDTO(String name) {}
 }

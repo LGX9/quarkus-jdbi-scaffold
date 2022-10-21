@@ -43,6 +43,9 @@ public class SystemEventEntityMapper implements RowMapper<SystemEventEntity> {
                 OffsetDateTime.ofInstant(
                         rs.getTimestamp("received_date").toInstant(), ZoneId.of("UTC"));
 
-        return new SystemEventEntity(id, uuid, eventType, payloadMap, creationDate, receivedDate);
+        UUID systemUUID = UUID.fromString(rs.getString("system_uuid"));
+
+        return new SystemEventEntity(
+                id, uuid, eventType, payloadMap, creationDate, receivedDate, systemUUID);
     }
 }
