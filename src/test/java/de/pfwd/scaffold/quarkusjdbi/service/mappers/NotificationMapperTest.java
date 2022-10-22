@@ -27,5 +27,9 @@ public class NotificationMapperTest {
                         NotificationSeverity.ALARM.name());
         ResponseDTO.NotificationResponseDTO dto = notificationMapper.entityToDto(entity);
         Assertions.assertEquals(entity.getUuid(), dto.uuid());
+        Assertions.assertEquals(entity.getSubject(), dto.subject());
+        Assertions.assertEquals(entity.getMessage(), dto.message());
+        Assertions.assertEquals(entity.getSeverity(), dto.severity());
+        Assertions.assertEquals(entity.getCreationDate(), dto.creationDate());
     }
 }
