@@ -3,26 +3,31 @@ package de.pfwd.scaffold.quarkusjdbi.persist;
 import de.pfwd.scaffold.quarkusjdbi.persist.repositories.NotificationRepository;
 import de.pfwd.scaffold.quarkusjdbi.persist.repositories.SystemEventRepository;
 import de.pfwd.scaffold.quarkusjdbi.persist.repositories.SystemRepository;
+import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
-import javax.inject.Singleton;
+import javax.ws.rs.Produces;
 import org.jdbi.v3.core.Jdbi;
 
-@Singleton
+@Dependent
 public class RepositoryProvider {
 
     @Inject Jdbi jdbi;
 
-    @Singleton
+    @Produces
+    @ApplicationScoped
     public SystemRepository systemRepository() {
         return jdbi.onDemand(SystemRepository.class);
     }
 
-    @Singleton
+    @Produces
+    @ApplicationScoped
     public SystemEventRepository systemEventRepository() {
         return jdbi.onDemand(SystemEventRepository.class);
     }
 
-    @Singleton
+    @Produces
+    @ApplicationScoped
     public NotificationRepository notificationRepository() {
         return jdbi.onDemand(NotificationRepository.class);
     }

@@ -34,20 +34,20 @@ public interface SystemEventRepository {
 
     // spotless:off
     @SqlQuery(
-            """
-              SELECT
-                se.id, se.uuid, setypes.name AS event_type, se.payload, se.creation_date, se.received_date, s.uuid as system_uuid
-              FROM
-                system_events se
-              JOIN
-                system_event_types setypes ON setypes.id = se.system_event_type_id
-              JOIN
-                systems s on s.id = se.system_id
-              WHERE 
-                s.uuid = :systemUUID
-              ORDER BY se.id
-              LIMIT 1000
-            """)
+    """
+      SELECT
+        se.id, se.uuid, setypes.name AS event_type, se.payload, se.creation_date, se.received_date, s.uuid as system_uuid
+      FROM
+        system_events se
+      JOIN
+        system_event_types setypes ON setypes.id = se.system_event_type_id
+      JOIN
+        systems s on s.id = se.system_id
+      WHERE 
+        s.uuid = :systemUUID
+      ORDER BY se.id
+      LIMIT 1000
+    """)
     // spotless:on
     @RegisterRowMapper(SystemEventEntityMapper.class)
     List<SystemEventEntity> retrieveSystemEventsFromSystem(@Bind("systemUUID") UUID systemUUID);
