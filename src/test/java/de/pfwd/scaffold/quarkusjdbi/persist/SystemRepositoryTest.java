@@ -14,7 +14,7 @@ import org.junit.jupiter.api.Test;
 
 @QuarkusTest
 @QuarkusTestResource(PostgresResource.class)
-public class SystemRepositoryIT {
+public class SystemRepositoryTest {
 
     @Inject SystemRepository systemRepository;
 

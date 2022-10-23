@@ -1,5 +1,5 @@
 name: Quarkus-JDBI Scaffold - Build & Test
-run-name: ${{ github.ref_name }} by ${{ github.actor }}
+run-name: Branch ${{ github.ref_name }} - Author ${{ github.actor }}
 on: [push]
 jobs:
   build-project:
@@ -7,13 +7,26 @@ jobs:
     steps:
       - name: Check out repository code
         uses: actions/checkout@v3
+        with:
+          # Needed for spotless
+          fetch-depth: 0
       - run: echo "💡 The branch ${{ github.ref_name }} from the repository ${{ github.repository }} has been cloned to the runner."
-      - uses: actions/setup-java@v3
+      - name: Install Java & Tools via the setup-java action
+        uses: actions/setup-java@v3
         with:
           distribution: 'temurin'
           java-version: '17'
       - name: Build quarkus project
         run: |
-          mvn quarkus:build
-      - run: echo "The project has been built"
-      - run: echo "🍏 This job's status is ${{ job.status }}."
+          mvn clean package
+      - run: echo "Project built successfully"
+      - name: Run spotless plugin to check code style
+        run: |
+          mvn spotless:check
+      - run: echo "Code Style of the project is good"
+      # for integration test use mvn integration-test -DskipITs=false
+      - name: Test the project
+        run: |
+          mvn verify
+      - run: echo "All tests ran through"
+      - run: echo "Job Status is ${{ job.status }}"
