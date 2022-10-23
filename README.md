@@ -1,4 +1,18 @@
+[![Quarkus-JDBI Scaffold - Build & Test](https://github.com/LGX9/quarkus-jdbi-scaffold/actions/workflows/build-scaffold.yml/badge.svg)](https://github.com/LGX9/quarkus-jdbi-scaffold/actions/workflows/build-scaffold.yml)
+
 # quarkus-jdbi-scaffold Project
+
+Playground project to determine usability for Quarkus with JDBI as full fletched Backend Service.
+Played around with Quarkus Dependency Injection, Basic Setup of Datasources and Repositories as well as unit tests.
+Other dependencies were integrated into the project.
+- Flyway
+- Mockito 
+- TestContainers for Database integration testing
+- Lombok
+- Spotless syntax plugin
+- Github Actions pipeline
+
+# Quarkus
 
 This project uses Quarkus, the Supersonic Subatomic Java Framework.
 
