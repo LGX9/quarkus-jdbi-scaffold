@@ -13,7 +13,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 @QuarkusTest
-@QuarkusTestResource(PostgresResource.class)
+//@QuarkusTestResource(PostgresResource.class)
 public class SystemRepositoryTest {
 
     @Inject SystemRepository systemRepository;
