@@ -81,6 +81,16 @@
       <artifactId>quarkus-flyway</artifactId>
     </dependency>
 
+    <!-- Security/Authorization -->
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-oidc</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-smallrye-jwt</artifactId>
+    </dependency>
+
     <!-- MISC -->
     <dependency>
       <groupId>org.mapstruct</groupId>
