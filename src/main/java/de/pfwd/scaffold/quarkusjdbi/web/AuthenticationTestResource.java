@@ -1,5 +1,6 @@
 package de.pfwd.scaffold.quarkusjdbi.web;
 
+import io.quarkus.logging.Log;
 import io.quarkus.security.Authenticated;
 import io.quarkus.security.identity.SecurityIdentity;
 import javax.annotation.security.RolesAllowed;
@@ -10,7 +11,7 @@ import org.eclipse.microprofile.jwt.JsonWebToken;
 
 @Path("/auth")
 @Authenticated
-public class AuthenticationTestController {
+public class AuthenticationTestResource {
 
   @Inject
   SecurityIdentity securityIdentity;
@@ -21,6 +22,7 @@ public class AuthenticationTestController {
   @GET
   @Path("/test")
   public User normalUser() {
+    Log.info("Authenticated User Request");
     return new User(securityIdentity.getPrincipal().getName(), jwt.getClaim("username"));
   }
 
@@ -28,6 +30,7 @@ public class AuthenticationTestController {
   @RolesAllowed("admin")
   @Path("/only-admin")
   public User adminUser() {
+    Log.info("Authenticated Admin User Request");
     return new User(securityIdentity.getPrincipal().getName(), jwt.getClaim("username"));
   }
 
